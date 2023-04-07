@@ -1,0 +1,110 @@
+[gd_scene load_steps=16 format=3 uid="uid://b00vmhsc6qh28"]
+
+[ext_resource type="Script" path="res://prefabs/misc/bullet.gd" id="1_rirhv"]
+[ext_resource type="Texture2D" uid="uid://c0eqsqbwe53lf" path="res://assets/die_small.png" id="2_ysccl"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_gqrf1"]
+size = Vector2(1, 1)
+
+[sub_resource type="Gradient" id="Gradient_7cfle"]
+colors = PackedColorArray(1, 1, 1, 1, 1, 1, 1, 0)
+
+[sub_resource type="GradientTexture1D" id="GradientTexture1D_bq06s"]
+gradient = SubResource("Gradient_7cfle")
+
+[sub_resource type="Curve" id="Curve_q8dfw"]
+_data = [Vector2(0, 1), 0.0, 0.0, 0, 0, Vector2(1, 0), 0.0, 0.0, 0, 0]
+point_count = 2
+
+[sub_resource type="CurveTexture" id="CurveTexture_6yx23"]
+curve = SubResource("Curve_q8dfw")
+
+[sub_resource type="ParticleProcessMaterial" id="ParticleProcessMaterial_bogy7"]
+emission_shape = 3
+emission_box_extents = Vector3(1.5, 1.5, 1.5)
+particle_flag_disable_z = true
+direction = Vector3(0, 0, 0)
+gravity = Vector3(0, 3, 0)
+orbit_velocity_min = 0.0
+orbit_velocity_max = 0.0
+scale_curve = SubResource("CurveTexture_6yx23")
+color_ramp = SubResource("GradientTexture1D_bq06s")
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_2t783"]
+atlas = ExtResource("2_ysccl")
+region = Rect2(0, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_5t4ni"]
+atlas = ExtResource("2_ysccl")
+region = Rect2(8, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_uld2q"]
+atlas = ExtResource("2_ysccl")
+region = Rect2(16, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dwgkj"]
+atlas = ExtResource("2_ysccl")
+region = Rect2(24, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_7pcnr"]
+atlas = ExtResource("2_ysccl")
+region = Rect2(32, 0, 8, 8)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_23frj"]
+atlas = ExtResource("2_ysccl")
+region = Rect2(40, 0, 8, 8)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_p3q54"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_2t783")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_5t4ni")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_uld2q")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dwgkj")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_7pcnr")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_23frj")
+}],
+"loop": false,
+"name": &"default",
+"speed": 14.0
+}]
+
+[node name="Bullet" type="CharacterBody2D" groups=["Bullet"]]
+script = ExtResource("1_rirhv")
+_friction = 1.0
+_grav = 1.0
+
+[node name="SpriteBox" type="CollisionShape2D" parent="."]
+scale = Vector2(2, 2)
+shape = SubResource("RectangleShape2D_gqrf1")
+disabled = true
+
+[node name="Hitbox" type="Area2D" parent="."]
+scale = Vector2(2, 2)
+
+[node name="Shape" type="CollisionShape2D" parent="Hitbox"]
+shape = SubResource("RectangleShape2D_gqrf1")
+
+[node name="Trail" type="GPUParticles2D" parent="."]
+amount = 15
+process_material = SubResource("ParticleProcessMaterial_bogy7")
+lifetime = 0.5
+fixed_fps = 60
+
+[node name="Sprite" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_p3q54")
+
+[connection signal="area_entered" from="Hitbox" to="." method="hitbox_area_entered"]
+[connection signal="area_exited" from="Hitbox" to="." method="hitbox_area_exited"]
+[connection signal="body_entered" from="Hitbox" to="." method="hitbox_body_entered"]

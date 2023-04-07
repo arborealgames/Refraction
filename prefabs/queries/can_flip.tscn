@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://cp0hn6rasivc0"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_l6f0v"]
+size = Vector2(8, 8)
+
+[node name="CanFlip" type="Area2D" groups=["CanFlip"]]
+
+[node name="Hitbox" type="CollisionShape2D" parent="."]
+shape = SubResource("RectangleShape2D_l6f0v")
+debug_color = Color(1, 0, 0, 0)
